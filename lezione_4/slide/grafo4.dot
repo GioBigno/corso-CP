@@ -1,0 +1,8 @@
+graph{
+	rankdir="LR"
+
+	a -- {b, c}
+	b -- {d, e}
+
+
+}
