@@ -1,0 +1,8 @@
+digraph{
+	rankdir="LR"
+
+	a -> {b, c}
+	b -> {c}
+	c -> {d}
+	d -> {b}
+}
