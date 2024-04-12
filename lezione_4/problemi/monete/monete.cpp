@@ -1,48 +1,57 @@
-#include <stdio.h>
-#include <assert.h>
+#include <fstream>
 #include <vector>
-
-#define MAXN 10000
-#define MAXM 100000
 
 using namespace std;
 
 int ans=0;
-bool visto[MAXN];
-int monete[MAXN];
+
 vector <vector <int>> adj;
+vector<bool> visited;
+vector<int> monete;
 
 void dfs(int nodo){
 
-    visto[nodo] = true;
+    visited[nodo] = true;
+
     ans += monete[nodo];
 
-    for(int i=0; i<adj[nodo].size(); i++)
-        if(visto[adj[nodo][i]] == false)
-            dfs(adj[nodo][i]);
+    for(size_t i=0; i<adj[nodo].size(); i++){
 
+		int child = adj[nodo][i];
+
+        if(visited[child] == false)
+            dfs(child);
+	}
 }
 
 int main() {
-    FILE *fr, *fw;
-    int N, M, A, B, i;
+    int N, M;
+    
+	ifstream in("input.txt");
+	ofstream out("output.txt");
 
-    fr = fopen("input.txt", "r");
-    fw = fopen("output.txt", "w");
-    assert(2 == fscanf(fr, "%d%d", &N, &M));
+	in>>N>>M;
+
     adj.resize(N);
-    for(i=0; i<N; i++)
-        assert(1 == fscanf(fr, "%d", &monete[i]));
-    for(i=0; i<M; i++){
-        assert(2 == fscanf(fr, "%d%d", &A, &B));
-        adj[A].push_back(B);
-        adj[B].push_back(A);
+	visited.resize(N);
+	monete.resize(N);
+    
+	for(size_t i=0; i<N; i++){
+        in>>monete[i];
+	}
+
+	for(size_t i=0; i<M; i++){
+		
+		int from, to;
+		in>>from>>to;
+
+        adj[from].push_back(to);
+        adj[to].push_back(from);
     }
 
     dfs(0);
 
-    fprintf(fw, "%d\n", ans);
-    fclose(fr);
-    fclose(fw);
+	out<<ans<<endl;
+
     return 0;
 }
